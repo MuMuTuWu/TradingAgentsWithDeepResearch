@@ -1,22 +1,26 @@
 import os
+from pathlib import Path
+
+# 获取当前文件所在目录作为项目根目录
+PROJECT_ROOT = Path(__file__).parent.parent
 
 DEFAULT_CONFIG = {
-    "project_dir": os.path.abspath(os.path.join(os.path.dirname(__file__), ".")),
-    "results_dir": os.getenv("TRADINGAGENTS_RESULTS_DIR", "./results"),
-    "data_dir": "/Users/yluo/Documents/Code/ScAI/FR1-data",
-    "data_cache_dir": os.path.join(
-        os.path.abspath(os.path.join(os.path.dirname(__file__), ".")),
-        "dataflows/data_cache",
-    ),
+    "project_dir": PROJECT_ROOT,
+    "results_dir": PROJECT_ROOT / "results",
+    "data_dir": PROJECT_ROOT / "tradingagents" / "datainterface" / "data",
+    "data_cache_dir": PROJECT_ROOT / "tradingagents" / "datainterface" / "data_cache",
     # LLM settings
     "llm_provider": "openai",
-    "deep_think_llm": "o4-mini",
-    "quick_think_llm": "gpt-4o-mini",
-    "backend_url": "https://api.openai.com/v1",
+    "deep_think_llm": "gpt-5-mini",
+    "quick_think_llm": "gpt-5-nano",
+    # "backend_url": "https://api.openai.com/v1",
+    "backend_url": "https://n1n.ai/v1",
     # Debate and discussion settings
     "max_debate_rounds": 1,
     "max_risk_discuss_rounds": 1,
     "max_recur_limit": 100,
     # Tool settings
     "online_tools": True,
+    # Output Debug Messages
+    "debug": True,
 }

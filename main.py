@@ -1,21 +1,45 @@
+# %%
+import os
 from tradingagents.graph.trading_graph import TradingAgentsGraph
 from tradingagents.default_config import DEFAULT_CONFIG
 
+from dotenv import load_dotenv
+load_dotenv()
+
 # Create a custom config
 config = DEFAULT_CONFIG.copy()
-config["llm_provider"] = "google"  # Use a different model
-config["backend_url"] = "https://generativelanguage.googleapis.com/v1"  # Use a different backend
-config["deep_think_llm"] = "gemini-2.0-flash"  # Use a different model
-config["quick_think_llm"] = "gemini-2.0-flash"  # Use a different model
-config["max_debate_rounds"] = 1  # Increase debate rounds
-config["online_tools"] = True  # Increase debate rounds
+config["llm_provider"] = "openai"
+config["deep_think_llm"] = "gpt-5-mini"
+config["quick_think_llm"] = "gpt-5-nano"
+config["backend_url"] = os.environ.get("BACKEND_URL")
+config["max_debate_rounds"] = 1
+config["max_risk_discuss_rounds"] = 1
+config["max_recur_limit"] = 100
+config["online_tools"] = True
+config["debug"] = True
 
 # Initialize with custom config
-ta = TradingAgentsGraph(debug=True, config=config)
+ta = TradingAgentsGraph(
+    # selected_analysts=["market", "social", "news", "fundamentals", "social_media_deep_research", "news_deep_research", "fundamentals_deep_research"],
+    selected_analysts=["market"],
+    debug=config["debug"],
+    config=config
+)
 
-# forward propagate
-_, decision = ta.propagate("NVDA", "2024-05-10")
+# %%
+# from IPython.display import Image, display
+# Image(ta.graph.get_graph().draw_mermaid_png())
+
+# %%
+# # forward propagate
+final_state, decision = ta.propagate("000300.SH", "2025-09-12")
 print(decision)
 
-# Memorize mistakes and reflect
+with open("final_state.json", "w", encoding="utf-8") as f:
+    import json
+    json.dump(final_state, f, indent=2, ensure_ascii=False, default=str)
+
+# %%
+# # Memorize mistakes and reflect
 # ta.reflect_and_remember(1000) # parameter is the position returns
+# %%

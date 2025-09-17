@@ -11,6 +11,7 @@ import os
 from dateutil.relativedelta import relativedelta
 from langchain_openai import ChatOpenAI
 import tradingagents.dataflows.interface as interface
+import tradingagents.datainterface.interface as interface_v2
 from tradingagents.default_config import DEFAULT_CONFIG
 from langchain_core.messages import HumanMessage
 
@@ -47,6 +48,56 @@ class Toolkit:
     def __init__(self, config=None):
         if config:
             self.update_config(config)
+
+    @staticmethod
+    @tool
+    def get_index_market_data(
+        symbol: Annotated[str, "股票代码"],
+        start_date: Annotated[str, "开始日期, 格式YYYY-MM-DD"],
+        end_date: Annotated[str, "结束日期, 格式YYYY-MM-DD"],
+    ) -> str:
+        """
+        Retrieve the stock price data for a given ticker symbol.
+        Args:
+            symbol (str): 股票代码 (如: 000001.SH、000905.SH)
+            start_date (str): 开始日期, 格式YYYY-MM-DD
+            end_date (str): 结束日期, 格式YYYY-MM-DD
+
+        Returns:
+            str: A formatted dataframe containing the stock price data for the specified ticker symbol in the specified date range.
+        """
+        result_data = interface_v2.get_index_market_data(symbol, start_date, end_date)
+
+        return result_data
+
+    @staticmethod
+    @tool
+    def get_index_indicators_report(
+        symbol: Annotated[str, "ticker symbol of the index"],
+        indicator: Annotated[
+            str, "technical indicator to get the analysis and report of"
+        ],
+        curr_date: Annotated[
+            str, "The current trading date you are trading on, YYYY-mm-dd"
+        ],
+        look_back_days: Annotated[int, "how many days to look back"] = 30,
+    ) -> str:
+        """
+        Retrieve technical indicators for a given ticker symbol and indicator.
+        Args:
+            symbol (str): Ticker symbol of the index, e.g. 000001.SH,000905.SH
+            indicator (str): Technical indicator to get the analysis and report of
+            curr_date (str): The current trading date you are trading on, YYYY-mm-dd
+            look_back_days (int): How many days to look back, default is 30
+        Returns:
+            str: A formatted dataframe containing the technical indicators for the specified ticker symbol and indicator.
+        """
+
+        result_stockstats = interface_v2.get_index_stats_indicators_window(
+            symbol, indicator, curr_date, look_back_days
+        )
+
+        return result_stockstats
 
     @staticmethod
     @tool

@@ -1,10 +1,12 @@
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 import time
 import json
+from tradingagents.agents.utils.agent_states import AgentState
+from tradingagents.agents.utils.agent_utils import Toolkit
 
 
-def create_social_media_analyst(llm, toolkit):
-    def social_media_analyst_node(state):
+def create_social_media_analyst(llm, toolkit: Toolkit):
+    def social_media_analyst_node(state: AgentState):
         current_date = state["trade_date"]
         ticker = state["company_of_interest"]
         company_name = state["company_of_interest"]

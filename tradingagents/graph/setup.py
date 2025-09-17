@@ -8,6 +8,7 @@ from langgraph.prebuilt import ToolNode
 from tradingagents.agents import *
 from tradingagents.agents.utils.agent_states import AgentState
 from tradingagents.agents.utils.agent_utils import Toolkit
+from tradingagents.default_config import DEFAULT_CONFIG
 
 from .conditional_logic import ConditionalLogic
 
@@ -27,6 +28,7 @@ class GraphSetup:
         invest_judge_memory,
         risk_manager_memory,
         conditional_logic: ConditionalLogic,
+        config: Dict[str, Any] = None,
     ):
         """Initialize with required components."""
         self.quick_thinking_llm = quick_thinking_llm
@@ -39,6 +41,7 @@ class GraphSetup:
         self.invest_judge_memory = invest_judge_memory
         self.risk_manager_memory = risk_manager_memory
         self.conditional_logic = conditional_logic
+        self.config = config or DEFAULT_CONFIG
 
     def setup_graph(
         self, selected_analysts=["market", "social", "news", "fundamentals"]
@@ -51,6 +54,9 @@ class GraphSetup:
                 - "social": Social media analyst
                 - "news": News analyst
                 - "fundamentals": Fundamentals analyst
+                - "social_media_deep_research": Social media deep research analyst
+                - "news_deep_research": News deep research analyst
+                - "fundamentals_deep_research": Fundamentals deep research analyst
         """
         if len(selected_analysts) == 0:
             raise ValueError("Trading Agents Graph Setup Error: no analysts selected!")
@@ -87,6 +93,27 @@ class GraphSetup:
             )
             delete_nodes["fundamentals"] = create_msg_delete()
             tool_nodes["fundamentals"] = self.tool_nodes["fundamentals"]
+
+        if "social_media_deep_research" in selected_analysts:
+            analyst_nodes["social_media_deep_research"] = create_social_media_deep_research_analyst(
+                self.config
+            )
+            delete_nodes["social_media_deep_research"] = create_msg_delete()
+            tool_nodes["social_media_deep_research"] = self.tool_nodes["social_media_deep_research"]
+
+        if "news_deep_research" in selected_analysts:
+            analyst_nodes["news_deep_research"] = create_news_deep_research_analyst(
+                self.config
+            )
+            delete_nodes["news_deep_research"] = create_msg_delete()
+            tool_nodes["news_deep_research"] = self.tool_nodes["news_deep_research"]
+
+        if "fundamentals_deep_research" in selected_analysts:
+            analyst_nodes["fundamentals_deep_research"] = create_fundamentals_deep_research_analyst(
+                self.config
+            )
+            delete_nodes["fundamentals_deep_research"] = create_msg_delete()
+            tool_nodes["fundamentals_deep_research"] = self.tool_nodes["fundamentals_deep_research"]
 
         # Create researcher and manager nodes
         bull_researcher_node = create_bull_researcher(

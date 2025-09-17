@@ -43,6 +43,21 @@ class ConditionalLogic:
             return "tools_fundamentals"
         return "Msg Clear Fundamentals"
 
+    def should_continue_social_media_deep_research(self, state: AgentState):
+        """Determine if social media deep research analysis should continue."""
+        # Deep research是自包含的，不需要工具调用循环
+        return "Msg Clear Social_media_deep_research"
+
+    def should_continue_news_deep_research(self, state: AgentState):
+        """Determine if news deep research analysis should continue."""
+        # Deep research是自包含的，不需要工具调用循环
+        return "Msg Clear News_deep_research"
+
+    def should_continue_fundamentals_deep_research(self, state: AgentState):
+        """Determine if fundamentals deep research analysis should continue."""
+        # Deep research是自包含的，不需要工具调用循环
+        return "Msg Clear Fundamentals_deep_research"
+
     def should_continue_debate(self, state: AgentState) -> str:
         """Determine if debate should continue."""
 

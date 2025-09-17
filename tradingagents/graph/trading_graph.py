@@ -41,7 +41,14 @@ class TradingAgentsGraph:
         """Initialize the trading agents graph and components.
 
         Args:
-            selected_analysts: List of analyst types to include
+            selected_analysts (list): List of analyst types to include. Options are:
+                - "market": Market analyst
+                - "social": Social media analyst
+                - "news": News analyst
+                - "fundamentals": Fundamentals analyst
+                - "social_media_deep_research": Social media deep research analyst
+                - "news_deep_research": News deep research analyst
+                - "fundamentals_deep_research": Fundamentals deep research analyst
             debug: Whether to run in debug mode
             config: Configuration dictionary. If None, uses default config
         """
@@ -59,8 +66,16 @@ class TradingAgentsGraph:
 
         # Initialize LLMs
         if self.config["llm_provider"].lower() == "openai" or self.config["llm_provider"] == "ollama" or self.config["llm_provider"] == "openrouter":
-            self.deep_thinking_llm = ChatOpenAI(model=self.config["deep_think_llm"], base_url=self.config["backend_url"])
-            self.quick_thinking_llm = ChatOpenAI(model=self.config["quick_think_llm"], base_url=self.config["backend_url"])
+            self.deep_thinking_llm = ChatOpenAI(
+                model=self.config["deep_think_llm"],
+                base_url=self.config["backend_url"],
+                model_kwargs={"reasoning_effort": "minimal"}
+            )
+            self.quick_thinking_llm = ChatOpenAI(
+                model=self.config["quick_think_llm"],
+                base_url=self.config["backend_url"],
+                model_kwargs={"reasoning_effort": "minimal"}
+            )
         elif self.config["llm_provider"].lower() == "anthropic":
             self.deep_thinking_llm = ChatAnthropic(model=self.config["deep_think_llm"], base_url=self.config["backend_url"])
             self.quick_thinking_llm = ChatAnthropic(model=self.config["quick_think_llm"], base_url=self.config["backend_url"])
@@ -95,6 +110,7 @@ class TradingAgentsGraph:
             self.invest_judge_memory,
             self.risk_manager_memory,
             self.conditional_logic,
+            self.config
         )
 
         self.propagator = Propagator()
@@ -114,12 +130,14 @@ class TradingAgentsGraph:
         return {
             "market": ToolNode(
                 [
-                    # online tools
-                    self.toolkit.get_YFin_data_online,
-                    self.toolkit.get_stockstats_indicators_report_online,
-                    # offline tools
-                    self.toolkit.get_YFin_data,
-                    self.toolkit.get_stockstats_indicators_report,
+                    self.toolkit.get_index_market_data,
+                    self.toolkit.get_index_indicators_report,
+                    # # online tools
+                    # self.toolkit.get_YFin_data_online,
+                    # self.toolkit.get_stockstats_indicators_report_online,
+                    # # offline tools
+                    # self.toolkit.get_YFin_data,
+                    # self.toolkit.get_stockstats_indicators_report,
                 ]
             ),
             "social": ToolNode(
@@ -152,6 +170,9 @@ class TradingAgentsGraph:
                     self.toolkit.get_simfin_income_stmt,
                 ]
             ),
+            "social_media_deep_research": ToolNode([]),  # 空工具节点，因为deep_research内部处理
+            "news_deep_research": ToolNode([]),  # 空工具节点，因为deep_research内部处理
+            "fundamentals_deep_research": ToolNode([]),  # 空工具节点，因为deep_research内部处理
         }
 
     def propagate(self, company_name, trade_date):
@@ -198,6 +219,9 @@ class TradingAgentsGraph:
             "sentiment_report": final_state["sentiment_report"],
             "news_report": final_state["news_report"],
             "fundamentals_report": final_state["fundamentals_report"],
+            "social_media_deep_research_report": final_state.get("social_media_deep_research_report", ""),
+            "news_deep_research_report": final_state.get("news_deep_research_report", ""),
+            "fundamentals_deep_research_report": final_state.get("fundamentals_deep_research_report", ""),
             "investment_debate_state": {
                 "bull_history": final_state["investment_debate_state"]["bull_history"],
                 "bear_history": final_state["investment_debate_state"]["bear_history"],
