@@ -194,6 +194,7 @@ async def summarize_webpage(model: BaseChatModel, webpage_content: str) -> str:
     Returns:
         Formatted summary with key excerpts, or original content if summarization fails
     """
+    # print(f"=== Summarize webpage: {len(webpage_content)} characters ===")
     try:
         # Create prompt with current date context
         prompt_content = summarize_webpage_prompt.format(
