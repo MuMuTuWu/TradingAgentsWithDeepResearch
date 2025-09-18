@@ -58,6 +58,11 @@ async def tavily_search(
     Returns:
         Formatted string containing summarized search results
     """
+    print(f"=== Tavily Search Call Details ===")
+    print(f"  Queries: {queries}")
+    print(f"  Max Results: {max_results}")
+    print(f"  Topic: {topic}")
+
     # Step 1: Execute search queries asynchronously
     search_results = await tavily_search_async(
         queries,
@@ -136,6 +141,9 @@ async def tavily_search(
         formatted_output += f"URL: {url}\n\n"
         formatted_output += f"SUMMARY:\n{result['content']}\n\n"
         formatted_output += "\n\n" + "-" * 80 + "\n"
+    
+    # Print call details before returning
+    print(f"  Formatted Output Length: {len(formatted_output)} characters")
     
     return formatted_output
 

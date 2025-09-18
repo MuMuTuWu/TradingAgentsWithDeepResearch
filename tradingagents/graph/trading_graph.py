@@ -35,6 +35,7 @@ class TradingAgentsGraph:
     def __init__(
         self,
         selected_analysts=["market", "social", "news", "fundamentals"],
+        selected_deep_researcher=["social_media_deep_research", "news_deep_research", "fundamentals_deep_research"],
         debug=False,
         config: Dict[str, Any] = None,
     ):
@@ -46,6 +47,7 @@ class TradingAgentsGraph:
                 - "social": Social media analyst
                 - "news": News analyst
                 - "fundamentals": Fundamentals analyst
+            selected_deep_researcher (list): List of deep research types to include. Options are:
                 - "social_media_deep_research": Social media deep research analyst
                 - "news_deep_research": News deep research analyst
                 - "fundamentals_deep_research": Fundamentals deep research analyst
@@ -69,12 +71,14 @@ class TradingAgentsGraph:
             self.deep_thinking_llm = ChatOpenAI(
                 model=self.config["deep_think_llm"],
                 base_url=self.config["backend_url"],
-                model_kwargs={"reasoning_effort": "minimal"}
+                reasoning_effort="minimal",
+                # model_kwargs={"reasoning_effort": "minimal"}
             )
             self.quick_thinking_llm = ChatOpenAI(
                 model=self.config["quick_think_llm"],
                 base_url=self.config["backend_url"],
-                model_kwargs={"reasoning_effort": "minimal"}
+                reasoning_effort="minimal",
+                # model_kwargs={"reasoning_effort": "minimal"}
             )
         elif self.config["llm_provider"].lower() == "anthropic":
             self.deep_thinking_llm = ChatAnthropic(model=self.config["deep_think_llm"], base_url=self.config["backend_url"])
@@ -123,7 +127,7 @@ class TradingAgentsGraph:
         self.log_states_dict = {}  # date to full state dict
 
         # Set up the graph
-        self.graph = self.graph_setup.setup_graph(selected_analysts)
+        self.graph = self.graph_setup.setup_graph(selected_analysts, selected_deep_researcher)
 
     def _create_tool_nodes(self) -> Dict[str, ToolNode]:
         """Create tool nodes for different data sources."""
@@ -170,9 +174,6 @@ class TradingAgentsGraph:
                     self.toolkit.get_simfin_income_stmt,
                 ]
             ),
-            "social_media_deep_research": ToolNode([]),  # 空工具节点，因为deep_research内部处理
-            "news_deep_research": ToolNode([]),  # 空工具节点，因为deep_research内部处理
-            "fundamentals_deep_research": ToolNode([]),  # 空工具节点，因为deep_research内部处理
         }
 
     def propagate(self, company_name, trade_date):

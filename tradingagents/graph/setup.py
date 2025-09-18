@@ -44,7 +44,8 @@ class GraphSetup:
         self.config = config or DEFAULT_CONFIG
 
     def setup_graph(
-        self, selected_analysts=["market", "social", "news", "fundamentals"]
+        self, selected_analysts=["market", "social", "news", "fundamentals"],
+        selected_deep_researcher=["social_media_deep_research", "news_deep_research", "fundamentals_deep_research"]
     ):
         """Set up and compile the agent workflow graph.
 
@@ -54,6 +55,7 @@ class GraphSetup:
                 - "social": Social media analyst
                 - "news": News analyst
                 - "fundamentals": Fundamentals analyst
+            selected_deep_researcher (list): List of deep research types to include. Options are:
                 - "social_media_deep_research": Social media deep research analyst
                 - "news_deep_research": News deep research analyst
                 - "fundamentals_deep_research": Fundamentals deep research analyst
@@ -94,26 +96,21 @@ class GraphSetup:
             delete_nodes["fundamentals"] = create_msg_delete()
             tool_nodes["fundamentals"] = self.tool_nodes["fundamentals"]
 
-        if "social_media_deep_research" in selected_analysts:
+        # Create deep research analyst nodes (no tool nodes or clear nodes needed)
+        if "social_media_deep_research" in selected_deep_researcher:
             analyst_nodes["social_media_deep_research"] = create_social_media_deep_research_analyst(
                 self.config
             )
-            delete_nodes["social_media_deep_research"] = create_msg_delete()
-            tool_nodes["social_media_deep_research"] = self.tool_nodes["social_media_deep_research"]
 
-        if "news_deep_research" in selected_analysts:
+        if "news_deep_research" in selected_deep_researcher:
             analyst_nodes["news_deep_research"] = create_news_deep_research_analyst(
                 self.config
             )
-            delete_nodes["news_deep_research"] = create_msg_delete()
-            tool_nodes["news_deep_research"] = self.tool_nodes["news_deep_research"]
 
-        if "fundamentals_deep_research" in selected_analysts:
+        if "fundamentals_deep_research" in selected_deep_researcher:
             analyst_nodes["fundamentals_deep_research"] = create_fundamentals_deep_research_analyst(
                 self.config
             )
-            delete_nodes["fundamentals_deep_research"] = create_msg_delete()
-            tool_nodes["fundamentals_deep_research"] = self.tool_nodes["fundamentals_deep_research"]
 
         # Create researcher and manager nodes
         bull_researcher_node = create_bull_researcher(
@@ -138,9 +135,13 @@ class GraphSetup:
         # Create workflow
         workflow = StateGraph(AgentState)
 
-        # Add analyst nodes to the graph
+        # Add all analyst nodes to the graph
+        all_analysts = list(selected_analysts) + list(selected_deep_researcher)
         for analyst_type, node in analyst_nodes.items():
             workflow.add_node(f"{analyst_type.capitalize()} Analyst", node)
+            
+        # Add tool nodes and delete nodes for regular analysts only
+        for analyst_type in selected_analysts:
             workflow.add_node(
                 f"Msg Clear {analyst_type.capitalize()}", delete_nodes[analyst_type]
             )
@@ -157,11 +158,11 @@ class GraphSetup:
         workflow.add_node("Risk Judge", risk_manager_node)
 
         # Define edges - Fan-out/Fan-in parallel structure
-        # Fan-out: START同时连接到所有analyst
-        for analyst_type in selected_analysts:
+        # Fan-out: START同时连接到所有analyst（包括深度研究）
+        for analyst_type in all_analysts:
             workflow.add_edge(START, f"{analyst_type.capitalize()} Analyst")
 
-        # 配置每个analyst的工具循环
+        # 配置每个常规analyst的工具循环
         for analyst_type in selected_analysts:
             current_analyst = f"{analyst_type.capitalize()} Analyst"
             current_tools = f"tools_{analyst_type}"
@@ -174,10 +175,13 @@ class GraphSetup:
                 [current_tools, current_clear],
             )
             workflow.add_edge(current_tools, current_analyst)
+            
 
-        # Fan-in: 所有analyst的clear节点连接到Bull Researcher
+        # Fan-in: 常规分析师通过clear节点连接，深度研究分析师直接连接到Bull Researcher
         clear_nodes = [f"Msg Clear {analyst_type.capitalize()}" for analyst_type in selected_analysts]
-        workflow.add_edge(clear_nodes, "Bull Researcher")
+        deep_research_nodes = [f"{analyst_type.capitalize()} Analyst" for analyst_type in selected_deep_researcher]
+        all_final_nodes = clear_nodes + deep_research_nodes
+        workflow.add_edge(all_final_nodes, "Bull Researcher")
 
         # Add remaining edges
         workflow.add_conditional_edges(

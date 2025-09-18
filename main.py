@@ -16,19 +16,21 @@ config["max_debate_rounds"] = 1
 config["max_risk_discuss_rounds"] = 1
 config["max_recur_limit"] = 100
 config["online_tools"] = True
-config["debug"] = True
+config["debug"] = False
 
 # Initialize with custom config
 ta = TradingAgentsGraph(
-    # selected_analysts=["market", "social", "news", "fundamentals", "social_media_deep_research", "news_deep_research", "fundamentals_deep_research"],
+    # selected_analysts=["market"],
+    # selected_deep_researcher=["social_media_deep_research", "news_deep_research", "fundamentals_deep_research"],
     selected_analysts=["market"],
+    selected_deep_researcher=["social_media_deep_research", "news_deep_research", "fundamentals_deep_research"],
     debug=config["debug"],
     config=config
 )
 
 # %%
-# from IPython.display import Image, display
-# Image(ta.graph.get_graph().draw_mermaid_png())
+from IPython.display import Image, display
+Image(ta.graph.get_graph().draw_mermaid_png())
 
 # %%
 # # forward propagate
