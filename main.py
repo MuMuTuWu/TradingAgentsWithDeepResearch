@@ -11,7 +11,7 @@ config = DEFAULT_CONFIG.copy()
 config["llm_provider"] = "openai"
 config["deep_think_llm"] = "gpt-5-mini"
 config["quick_think_llm"] = "gpt-5-nano"
-config["backend_url"] = os.environ.get("BACKEND_URL")
+config["backend_url"] = os.environ.get("BASE_URL")
 config["max_debate_rounds"] = 1
 config["max_risk_discuss_rounds"] = 1
 config["max_recur_limit"] = 100
@@ -20,8 +20,6 @@ config["debug"] = False
 
 # Initialize with custom config
 ta = TradingAgentsGraph(
-    # selected_analysts=["market"],
-    # selected_deep_researcher=["social_media_deep_research", "news_deep_research", "fundamentals_deep_research"],
     selected_analysts=["market"],
     selected_deep_researcher=["social_media_deep_research", "news_deep_research", "fundamentals_deep_research"],
     debug=config["debug"],

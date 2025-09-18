@@ -1,213 +1,192 @@
-<p align="center">
-  <img src="assets/TauricResearch.png" style="width: 60%; height: auto;">
-</p>
+# TradingAgents with Deep Research Integration
 
-<div align="center" style="line-height: 1;">
-  <a href="https://arxiv.org/abs/2412.20138" target="_blank"><img alt="arXiv" src="https://img.shields.io/badge/arXiv-2412.20138-B31B1B?logo=arxiv"/></a>
-  <a href="https://discord.com/invite/hk9PGKShPK" target="_blank"><img alt="Discord" src="https://img.shields.io/badge/Discord-TradingResearch-7289da?logo=discord&logoColor=white&color=7289da"/></a>
-  <a href="./assets/wechat.png" target="_blank"><img alt="WeChat" src="https://img.shields.io/badge/WeChat-TauricResearch-brightgreen?logo=wechat&logoColor=white"/></a>
-  <a href="https://x.com/TauricResearch" target="_blank"><img alt="X Follow" src="https://img.shields.io/badge/X-TauricResearch-white?logo=x&logoColor=white"/></a>
-  <br>
-  <a href="https://github.com/TauricResearch/" target="_blank"><img alt="Community" src="https://img.shields.io/badge/Join_GitHub_Community-TauricResearch-14C290?logo=discourse"/></a>
-</div>
+## 项目概述
 
-<div align="center">
-  <!-- Keep these links. Translations will automatically update with the README. -->
-  <a href="https://www.readme-i18n.com/TauricResearch/TradingAgents?lang=de">Deutsch</a> | 
-  <a href="https://www.readme-i18n.com/TauricResearch/TradingAgents?lang=es">Español</a> | 
-  <a href="https://www.readme-i18n.com/TauricResearch/TradingAgents?lang=fr">français</a> | 
-  <a href="https://www.readme-i18n.com/TauricResearch/TradingAgents?lang=ja">日本語</a> | 
-  <a href="https://www.readme-i18n.com/TauricResearch/TradingAgents?lang=ko">한국어</a> | 
-  <a href="https://www.readme-i18n.com/TauricResearch/TradingAgents?lang=pt">Português</a> | 
-  <a href="https://www.readme-i18n.com/TauricResearch/TradingAgents?lang=ru">Русский</a> | 
-  <a href="https://www.readme-i18n.com/TauricResearch/TradingAgents?lang=zh">中文</a>
-</div>
+本项目是基于两个开源项目的深度整合：
+- [TauricResearch/TradingAgents](https://github.com/TauricResearch/TradingAgents): 多智能体金融交易框架
+- [langchain-ai/open_deep_research](https://github.com/langchain-ai/open_deep_research): 深度研究分析系统
 
----
+通过将深度研究能力集成到投研智能体中，本项目构建了一个更加全面和深入的金融分析与交易决策系统。该系统不仅具备传统的技术分析、基本面分析、情绪分析和新闻分析能力，还引入了深度研究机制，能够对特定主题进行更加深入和全面的调研。
 
-# TradingAgents: Multi-Agents LLM Financial Trading Framework 
+## 快速开始
 
-> 🎉 **TradingAgents** officially released! We have received numerous inquiries about the work, and we would like to express our thanks for the enthusiasm in our community.
->
-> So we decided to fully open-source the framework. Looking forward to building impactful projects with you!
+### 运行入口
 
-<div align="center">
-<a href="https://www.star-history.com/#TauricResearch/TradingAgents&Date">
- <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=TauricResearch/TradingAgents&type=Date&theme=dark" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=TauricResearch/TradingAgents&type=Date" />
-   <img alt="TradingAgents Star History" src="https://api.star-history.com/svg?repos=TauricResearch/TradingAgents&type=Date" style="width: 80%; height: auto;" />
- </picture>
-</a>
-</div>
+在运行项目之前，需要先配置环境变量：
 
-<div align="center">
-
-🚀 [TradingAgents](#tradingagents-framework) | ⚡ [Installation & CLI](#installation-and-cli) | 🎬 [Demo](https://www.youtube.com/watch?v=90gr5lwjIho) | 📦 [Package Usage](#tradingagents-package) | 🤝 [Contributing](#contributing) | 📄 [Citation](#citation)
-
-</div>
-
-## TradingAgents Framework
-
-TradingAgents is a multi-agent trading framework that mirrors the dynamics of real-world trading firms. By deploying specialized LLM-powered agents: from fundamental analysts, sentiment experts, and technical analysts, to trader, risk management team, the platform collaboratively evaluates market conditions and informs trading decisions. Moreover, these agents engage in dynamic discussions to pinpoint the optimal strategy.
-
-<p align="center">
-  <img src="assets/schema.png" style="width: 100%; height: auto;">
-</p>
-
-> TradingAgents framework is designed for research purposes. Trading performance may vary based on many factors, including the chosen backbone language models, model temperature, trading periods, the quality of data, and other non-deterministic factors. [It is not intended as financial, investment, or trading advice.](https://tauric.ai/disclaimer/)
-
-Our framework decomposes complex trading tasks into specialized roles. This ensures the system achieves a robust, scalable approach to market analysis and decision-making.
-
-### Analyst Team
-- Fundamentals Analyst: Evaluates company financials and performance metrics, identifying intrinsic values and potential red flags.
-- Sentiment Analyst: Analyzes social media and public sentiment using sentiment scoring algorithms to gauge short-term market mood.
-- News Analyst: Monitors global news and macroeconomic indicators, interpreting the impact of events on market conditions.
-- Technical Analyst: Utilizes technical indicators (like MACD and RSI) to detect trading patterns and forecast price movements.
-
-<p align="center">
-  <img src="assets/analyst.png" width="100%" style="display: inline-block; margin: 0 2%;">
-</p>
-
-### Researcher Team
-- Comprises both bullish and bearish researchers who critically assess the insights provided by the Analyst Team. Through structured debates, they balance potential gains against inherent risks.
-
-<p align="center">
-  <img src="assets/researcher.png" width="70%" style="display: inline-block; margin: 0 2%;">
-</p>
-
-### Trader Agent
-- Composes reports from the analysts and researchers to make informed trading decisions. It determines the timing and magnitude of trades based on comprehensive market insights.
-
-<p align="center">
-  <img src="assets/trader.png" width="70%" style="display: inline-block; margin: 0 2%;">
-</p>
-
-### Risk Management and Portfolio Manager
-- Continuously evaluates portfolio risk by assessing market volatility, liquidity, and other risk factors. The risk management team evaluates and adjusts trading strategies, providing assessment reports to the Portfolio Manager for final decision.
-- The Portfolio Manager approves/rejects the transaction proposal. If approved, the order will be sent to the simulated exchange and executed.
-
-<p align="center">
-  <img src="assets/risk.png" width="70%" style="display: inline-block; margin: 0 2%;">
-</p>
-
-## Installation and CLI
-
-### Installation
-
-Clone TradingAgents:
 ```bash
-git clone https://github.com/TauricResearch/TradingAgents.git
-cd TradingAgents
+# 复制环境变量模板文件
+cp .env.example .env
+
+# 编辑 .env 文件，添加必要的API密钥
+# 例如：OPENAI_API_KEY、FINNHUB_API_KEY等
 ```
 
-Create a virtual environment in any of your favorite environment managers:
-```bash
-conda create -n tradingagents python=3.13
-conda activate tradingagents
-```
-
-Install dependencies:
-```bash
-pip install -r requirements.txt
-```
-
-### Required APIs
-
-You will also need the FinnHub API for financial data. All of our code is implemented with the free tier.
-```bash
-export FINNHUB_API_KEY=$YOUR_FINNHUB_API_KEY
-```
-
-You will need the OpenAI API for all the agents.
-```bash
-export OPENAI_API_KEY=$YOUR_OPENAI_API_KEY
-```
-
-### CLI Usage
-
-You can also try out the CLI directly by running:
-```bash
-python -m cli.main
-```
-You will see a screen where you can select your desired tickers, date, LLMs, research depth, etc.
-
-<p align="center">
-  <img src="assets/cli/cli_init.png" width="100%" style="display: inline-block; margin: 0 2%;">
-</p>
-
-An interface will appear showing results as they load, letting you track the agent's progress as it runs.
-
-<p align="center">
-  <img src="assets/cli/cli_news.png" width="100%" style="display: inline-block; margin: 0 2%;">
-</p>
-
-<p align="center">
-  <img src="assets/cli/cli_transaction.png" width="100%" style="display: inline-block; margin: 0 2%;">
-</p>
-
-## TradingAgents Package
-
-### Implementation Details
-
-We built TradingAgents with LangGraph to ensure flexibility and modularity. We utilize `o1-preview` and `gpt-4o` as our deep thinking and fast thinking LLMs for our experiments. However, for testing purposes, we recommend you use `o4-mini` and `gpt-4.1-mini` to save on costs as our framework makes **lots of** API calls.
-
-### Python Usage
-
-To use TradingAgents inside your code, you can import the `tradingagents` module and initialize a `TradingAgentsGraph()` object. The `.propagate()` function will return a decision. You can run `main.py`, here's also a quick example:
+项目的主要运行入口是 `main.py`：
 
 ```python
-from tradingagents.graph.trading_graph import TradingAgentsGraph
-from tradingagents.default_config import DEFAULT_CONFIG
-
-ta = TradingAgentsGraph(debug=True, config=DEFAULT_CONFIG.copy())
-
-# forward propagate
-_, decision = ta.propagate("NVDA", "2024-05-10")
-print(decision)
+# 使用 uv 运行
+uv run main.py
 ```
 
-You can also adjust the default configuration to set your own choice of LLMs, debate rounds, etc.
+### 当前配置
+
+当前版本的 `selected_analysts` 仅支持 **market analyst**，这是为了专注于技术分析能力的优化。未来版本将逐步支持更多分析师类型。
 
 ```python
-from tradingagents.graph.trading_graph import TradingAgentsGraph
-from tradingagents.default_config import DEFAULT_CONFIG
-
-# Create a custom config
-config = DEFAULT_CONFIG.copy()
-config["deep_think_llm"] = "gpt-4.1-nano"  # Use a different model
-config["quick_think_llm"] = "gpt-4.1-nano"  # Use a different model
-config["max_debate_rounds"] = 1  # Increase debate rounds
-config["online_tools"] = True # Use online tools or cached data
-
-# Initialize with custom config
-ta = TradingAgentsGraph(debug=True, config=config)
-
-# forward propagate
-_, decision = ta.propagate("NVDA", "2024-05-10")
-print(decision)
+# main.py 中的配置
+ta = TradingAgentsGraph(
+    selected_analysts=["market"],  # 当前仅支持市场分析师
+    selected_deep_researcher=["social_media_deep_research", "news_deep_research", "fundamentals_deep_research"],
+    debug=config["debug"],
+    config=config
+)
 ```
 
-> For `online_tools`, we recommend enabling them for experimentation, as they provide access to real-time data. The agents' offline tools rely on cached data from our **Tauric TradingDB**, a curated dataset we use for backtesting. We're currently in the process of refining this dataset, and we plan to release it soon alongside our upcoming projects. Stay tuned!
+## 系统架构
 
-You can view the full list of configurations in `tradingagents/default_config.py`.
+<p align="center">
+  <img src="assets/agent_graph.png" alt="Multi-Agent Architecture" style="width: 100%; height: auto;">
+</p>
 
-## Contributing
+本系统采用多智能体协作架构，通过专业化分工和动态协作来实现全面的投资研究和交易决策。整个架构可以分为以下几个层次：
 
-We welcome contributions from the community! Whether it's fixing a bug, improving documentation, or suggesting a new feature, your input helps make this project better. If you are interested in this line of research, please consider joining our open-source financial AI research community [Tauric Research](https://tauric.ai/).
+### 1. 数据采集与分析层 (Analyst Team)
 
-## Citation
+#### 常规分析师 (Regular Analysts)
+这些分析师负责基础的市场数据收集和初步分析：
 
-Please reference our work if you find *TradingAgents* provides you with some help :)
+- **Market Analyst (市场分析师)**
+  - **功能**: 技术指标分析和市场趋势研究
+  - **工具**: 移动平均线(SMA/EMA)、MACD、RSI、布林带、ATR、成交量加权移动平均(VWMA)等
+  - **输出**: 详细的技术分析报告，包含趋势判断和关键指标分析
+  - **特点**: 选择最相关的8个指标进行互补性分析，避免冗余
 
-```
-@misc{xiao2025tradingagentsmultiagentsllmfinancial,
-      title={TradingAgents: Multi-Agents LLM Financial Trading Framework}, 
-      author={Yijia Xiao and Edward Sun and Di Luo and Wei Wang},
-      year={2025},
-      eprint={2412.20138},
-      archivePrefix={arXiv},
-      primaryClass={q-fin.TR},
-      url={https://arxiv.org/abs/2412.20138}, 
-}
-```
+- **Social Media Analyst (社交媒体分析师)**
+  - **功能**: 社交媒体情绪分析和公司特定新闻研究
+  - **数据源**: Reddit、Twitter等社交平台的股票讨论
+  - **输出**: 公众情绪报告和社交媒体趋势分析
+
+- **News Analyst (新闻分析师)**
+  - **功能**: 全球新闻和宏观经济指标分析
+  - **数据源**: 主流财经媒体、政策发布、行业新闻
+  - **输出**: 新闻事件对市场影响的综合分析报告
+
+- **Fundamentals Analyst (基本面分析师)**
+  - **功能**: 公司财务数据和基本面信息分析
+  - **数据源**: 财务报表、内部人士交易、公司公告
+  - **输出**: 公司基本面健康度和价值评估报告
+
+#### 深度研究分析师 (Deep Research Analysts)
+这些分析师利用深度研究系统进行更加全面和深入的专题分析：
+
+- **Social Media Deep Research Analyst (社交媒体深度研究分析师)**
+  - **功能**: 广域社交媒体信息收集与深度情绪分析
+  - **研究范围**: 微博、雪球、知乎、Reddit、Twitter等多平台
+  - **分析维度**: 
+    - 公众讨论与情绪变化趋势
+    - 关键事件催化剂识别
+    - 媒体报道与社媒观点一致性分析
+    - 情绪刻度量化(-2到+2)
+  - **输出**: 结构化的深度社交媒体研究报告，包含逐日时间线、情绪区间综述、主题洞察等
+
+- **News Deep Research Analyst (新闻深度研究分析师)**
+  - **功能**: 权威新闻事件的深度收集与影响分析
+  - **数据源**: 权威财经媒体、国际主流媒体、官方公告、券商研报
+  - **分析框架**:
+    - 重大新闻事件识别与分类
+    - 多源验证与事实核查
+    - 政策监管动态分析
+    - 业务经营新闻跟踪
+  - **输出**: 新闻事件时间线、政策影响评估、媒体可信度分析
+
+- **Fundamentals Deep Research Analyst (基本面深度研究分析师)**
+  - **功能**: 财务数据的深度挖掘与估值建模
+  - **数据源**: 官方财务数据、专业数据平台、券商研报、行业数据
+  - **分析维度**:
+    - 财务质量深度分析
+    - 盈利能力可持续性评估
+    - 成长性驱动因素识别
+    - 估值合理性多维度对比
+  - **输出**: 基本面评级、财务健康度分析、同业对比、投资价值评估
+
+### 2. 研究辩论层 (Research Team)
+
+- **Bull Researcher (多头研究员)**
+  - **功能**: 构建看涨论证，强调增长潜力和竞争优势
+  - **策略**: 利用正面指标和市场机会，反驳空头观点
+  - **记忆机制**: 从历史决策中学习，避免重复错误
+
+- **Bear Researcher (空头研究员)**
+  - **功能**: 构建看跌论证，强调风险和挑战
+  - **策略**: 识别潜在威胁和竞争劣势，质疑乐观假设
+  - **记忆机制**: 基于过往经验优化风险识别能力
+
+- **Research Manager (研究总监)**
+  - **功能**: 主持多空辩论，做出最终投资建议
+  - **决策过程**: 综合评估辩论双方论点，形成明确的BUY/HOLD/SELL建议
+  - **输出**: 详细的投资计划和实施策略
+
+### 3. 交易执行层 (Trading Team)
+
+- **Trader (交易员)**
+  - **功能**: 基于研究团队的投资计划制定具体交易方案
+  - **输入**: 所有分析师报告和研究团队的投资建议
+  - **输出**: 明确的交易提案(BUY/HOLD/SELL)
+  - **学习能力**: 从历史交易结果中总结经验教训
+
+### 4. 风险管理层 (Risk Management Team)
+
+- **Risky Analyst (激进风险分析师)**
+  - **功能**: 倡导高风险高收益策略
+  - **观点**: 强调增长潜力和竞争优势，质疑过度保守的策略
+  - **辩论策略**: 用数据驱动的反驳来挑战保守观点
+
+- **Safe Analyst (保守风险分析师)**
+  - **功能**: 优先考虑资产保护和稳定增长
+  - **观点**: 强调风险缓解和长期可持续性
+  - **辩论策略**: 识别高风险因素，提出谨慎替代方案
+
+- **Neutral Analyst (中性风险分析师)**
+  - **功能**: 提供平衡视角，权衡收益与风险
+  - **观点**: 倡导适度风险策略，避免极端立场
+  - **辩论策略**: 挑战激进和保守观点，寻求最佳平衡点
+
+- **Risk Judge (风险总监)**
+  - **功能**: 主持风险辩论，对交易员提案进行最终风险评估
+  - **决策权**: 批准或拒绝交易提案
+  - **输出**: 最终的交易决策和风险调整建议
+
+## 工作流程
+
+1. **并行分析阶段**: 所有分析师(包括深度研究分析师)同时开始工作
+   - 常规分析师进行基础数据收集和分析
+   - 深度研究分析师进行专题深度调研
+
+2. **研究辩论阶段**: Bull和Bear研究员基于所有分析师的报告进行辩论
+   - 多轮动态辩论，直到达到设定轮数或Research Manager介入
+   - Research Manager综合评估并形成投资建议
+
+3. **交易决策阶段**: Trader基于投资建议制定交易方案
+
+4. **风险评估阶段**: 三类风险分析师对交易方案进行多角度评估
+   - 多轮风险辩论，全面评估潜在风险
+   - Risk Judge做出最终批准或拒绝决定
+
+## 技术特性
+
+- **LangGraph架构**: 基于LangGraph构建的模块化智能体系统
+- **并行处理**: 多个分析师可以并行工作，提高效率
+- **记忆机制**: 各个智能体具备学习和记忆能力，能够从历史决策中改进
+- **深度研究集成**: 结合open_deep_research的深度调研能力
+- **动态辩论**: 支持多轮动态辩论机制
+- **可配置性**: 支持灵活的分析师组合和参数配置
+
+## 配置说明
+
+系统通过 `DEFAULT_CONFIG` 进行配置，主要参数包括：
+
+- **LLM设置**: 支持OpenAI、Anthropic、Google等多种LLM提供商
+- **辩论轮数**: 可配置投资辩论和风险辩论的最大轮数
+- **工具选择**: 支持在线工具和离线缓存数据两种模式
+- **调试模式**: 支持详细的执行过程追踪
