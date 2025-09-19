@@ -2,6 +2,7 @@ import asyncio
 import uuid
 from langgraph.checkpoint.memory import MemorySaver
 from open_deep_research import deep_researcher_builder
+from tradingagents.utils.token_logger import print_token_usage
 
 
 async def run_deep_research(config, research_query):
@@ -48,6 +49,13 @@ async def run_deep_research(config, research_query):
 
     try:
         result_state = await graph.ainvoke(inputs, research_config)
+        
+        # 如果result_state包含消息信息，尝试打印token使用情况
+        if isinstance(result_state, dict) and "messages" in result_state:
+            messages = result_state["messages"]
+            if messages and hasattr(messages[-1], 'response_metadata'):
+                print_token_usage(messages[-1], "Deep Research")
+        
         return result_state.get("final_report", "深度研究报告生成失败")
     except Exception as e:
         return f"深度研究分析过程中出现错误: {str(e)}"

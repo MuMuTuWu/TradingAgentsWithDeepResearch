@@ -1,6 +1,7 @@
 # TradingAgents/graph/signal_processing.py
 
 from langchain_openai import ChatOpenAI
+from tradingagents.utils.token_logger import print_token_usage
 
 
 class SignalProcessor:
@@ -28,4 +29,9 @@ class SignalProcessor:
             ("human", full_signal),
         ]
 
-        return self.quick_thinking_llm.invoke(messages).content
+        result = self.quick_thinking_llm.invoke(messages)
+        
+        # 打印token使用信息
+        print_token_usage(result, "Signal Processor")
+        
+        return result.content

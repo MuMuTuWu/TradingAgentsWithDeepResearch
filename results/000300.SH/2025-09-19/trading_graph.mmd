@@ -1,0 +1,54 @@
+---
+config:
+  flowchart:
+    curve: linear
+---
+graph TD;
+	__start__([<p>__start__</p>]):::first
+	Market_Analyst(Market Analyst)
+	Social_media_deep_research_Analyst(Social_media_deep_research Analyst)
+	News_deep_research_Analyst(News_deep_research Analyst)
+	Fundamentals_deep_research_Analyst(Fundamentals_deep_research Analyst)
+	Macro_deep_research_Analyst(Macro_deep_research Analyst)
+	Msg_Clear_Market(Msg Clear Market)
+	tools_market(tools_market)
+	Bull_Researcher(Bull Researcher)
+	Bear_Researcher(Bear Researcher)
+	Research_Manager(Research Manager)
+	Trader(Trader)
+	Risky_Analyst(Risky Analyst)
+	Neutral_Analyst(Neutral Analyst)
+	Safe_Analyst(Safe Analyst)
+	Risk_Judge(Risk Judge)
+	Report_Writer(Report Writer)
+	__end__([<p>__end__</p>]):::last
+	Bear_Researcher -.-> Bull_Researcher;
+	Bear_Researcher -.-> Research_Manager;
+	Bull_Researcher -.-> Bear_Researcher;
+	Bull_Researcher -.-> Research_Manager;
+	Fundamentals_deep_research_Analyst --> Bull_Researcher;
+	Macro_deep_research_Analyst --> Bull_Researcher;
+	Market_Analyst -.-> Msg_Clear_Market;
+	Market_Analyst -.-> tools_market;
+	Msg_Clear_Market --> Bull_Researcher;
+	Neutral_Analyst -.-> Risk_Judge;
+	Neutral_Analyst -.-> Risky_Analyst;
+	News_deep_research_Analyst --> Bull_Researcher;
+	Research_Manager --> Trader;
+	Risk_Judge --> Report_Writer;
+	Risky_Analyst -.-> Risk_Judge;
+	Risky_Analyst -.-> Safe_Analyst;
+	Safe_Analyst -.-> Neutral_Analyst;
+	Safe_Analyst -.-> Risk_Judge;
+	Social_media_deep_research_Analyst --> Bull_Researcher;
+	Trader --> Risky_Analyst;
+	__start__ --> Fundamentals_deep_research_Analyst;
+	__start__ --> Macro_deep_research_Analyst;
+	__start__ --> Market_Analyst;
+	__start__ --> News_deep_research_Analyst;
+	__start__ --> Social_media_deep_research_Analyst;
+	tools_market --> Market_Analyst;
+	Report_Writer --> __end__;
+	classDef default fill:#f2f0ff,line-height:1.2
+	classDef first fill-opacity:0
+	classDef last fill:#bfb6fc

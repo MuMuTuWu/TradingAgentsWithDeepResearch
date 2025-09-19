@@ -9,6 +9,8 @@ from .analysts.social_media_analyst import create_social_media_analyst
 from .analysts.social_media_deep_research_analyst import create_social_media_deep_research_analyst
 from .analysts.news_deep_research_analyst import create_news_deep_research_analyst
 from .analysts.fundamentals_deep_research_analyst import create_fundamentals_deep_research_analyst
+from .analysts.macro_deep_research_analyst import create_macro_deep_research_analyst
+from .analysts.report_writer_analyst import create_report_writer_analyst
 
 from .researchers.bear_researcher import create_bear_researcher
 from .researchers.bull_researcher import create_bull_researcher
@@ -43,5 +45,7 @@ __all__ = [
     "create_social_media_deep_research_analyst",
     "create_news_deep_research_analyst",
     "create_fundamentals_deep_research_analyst",
+    "create_macro_deep_research_analyst",
+    "create_report_writer_analyst",
     "create_trader",
 ]

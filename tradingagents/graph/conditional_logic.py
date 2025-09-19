@@ -58,6 +58,11 @@ class ConditionalLogic:
         # Deep research是自包含的，不需要工具调用循环
         return "Msg Clear Fundamentals_deep_research"
 
+    def should_continue_macro_deep_research(self, state: AgentState):
+        """Determine if macro deep research analysis should continue."""
+        # Deep research是自包含的，不需要工具调用循环
+        return "Msg Clear Macro_deep_research"
+
     def should_continue_debate(self, state: AgentState) -> str:
         """Determine if debate should continue."""
 

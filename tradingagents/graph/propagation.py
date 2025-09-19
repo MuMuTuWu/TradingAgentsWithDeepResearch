@@ -35,13 +35,18 @@ class Propagator:
                     "count": 0,
                 }
             ),
+            # research step
             "market_report": "",
             "fundamentals_report": "",
             "sentiment_report": "",
             "news_report": "",
+            # deep research step
             "social_media_deep_research_report": "",
             "news_deep_research_report": "",
             "fundamentals_deep_research_report": "",
+            "macro_deep_research_report": "",
+            # research report step
+            "research_report": "",
         }
 
     def get_graph_args(self) -> Dict[str, Any]:

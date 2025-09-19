@@ -60,9 +60,11 @@ class AgentState(MessagesState):
         str, "Report from the News Researcher of current world affairs"
     ]
     fundamentals_report: Annotated[str, "Report from the Fundamentals Researcher"]
+    # deep research step
     social_media_deep_research_report: Annotated[str, "Report from Social Media Deep Research Analyst"]
     news_deep_research_report: Annotated[str, "Report from News Deep Research Analyst"] 
     fundamentals_deep_research_report: Annotated[str, "Report from Fundamentals Deep Research Analyst"]
+    macro_deep_research_report: Annotated[str, "Report from Macro Deep Research Analyst"]
 
     # researcher team discussion step
     investment_debate_state: Annotated[
@@ -77,3 +79,6 @@ class AgentState(MessagesState):
         RiskDebateState, "Current state of the debate on evaluating risk"
     ]
     final_trade_decision: Annotated[str, "Final decision made by the Risk Analysts"]
+    
+    # research report step
+    research_report: Annotated[str, "Professional investment research report"]
