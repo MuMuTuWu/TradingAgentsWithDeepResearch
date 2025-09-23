@@ -63,6 +63,29 @@ class ConditionalLogic:
         # Deep research是自包含的，不需要工具调用循环
         return "Msg Clear Macro_deep_research"
 
+    def check_deep_research_completion(self, state: AgentState, selected_deep_researcher):
+        """检查所有深度研究是否完成，如果完成则继续到第一个analyst"""
+        # 检查所有选定的深度研究报告是否都已生成
+        report_mapping = {
+            "social_media_deep_research": "social_media_deep_research_report",
+            "news_deep_research": "news_deep_research_report", 
+            "fundamentals_deep_research": "fundamentals_deep_research_report",
+            "macro_deep_research": "macro_deep_research_report"
+        }
+        
+        # 检查所有深度研究是否都已完成
+        completed_count = 0
+        for research_type in selected_deep_researcher:
+            report_field = report_mapping.get(research_type)
+            if report_field and state.get(report_field):
+                completed_count += 1
+        
+        # 如果所有深度研究都完成了，继续到下一阶段
+        if completed_count == len(selected_deep_researcher):
+            return "continue"
+        else:
+            return "wait"  # 还有研究未完成，继续等待
+
     def should_continue_debate(self, state: AgentState) -> str:
         """Determine if debate should continue."""
 

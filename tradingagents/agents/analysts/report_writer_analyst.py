@@ -154,7 +154,7 @@ def create_report_writer_analyst(config, llm=None):
 4. **可读性**：结构清晰，便于不同层次投资者理解
 5. **合规性**：符合监管要求，包含必要的风险提示
 
-请基于以上资料和要求，撰写一份高质量的投资研究报告。"""
+请基于以上资料和要求，使用markdown格式撰写一份高质量的投资研究报告。"""
 
         # 如果提供了LLM，使用LLM生成研报
         if llm is not None:

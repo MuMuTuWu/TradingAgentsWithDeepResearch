@@ -10,7 +10,7 @@ load_dotenv()
 
 # forward propagate
 ticker = "000300.SH"
-current_date = "2025-09-19"
+current_date = "2025-09-23"
 
 # Create a custom config
 config = DEFAULT_CONFIG.copy()

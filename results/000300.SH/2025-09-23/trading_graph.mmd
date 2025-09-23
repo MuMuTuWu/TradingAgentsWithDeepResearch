@@ -21,34 +21,36 @@ graph TD;
 	Safe_Analyst(Safe Analyst)
 	Risk_Judge(Risk Judge)
 	Report_Writer(Report Writer)
+	Sync_Node(Sync Node)
 	__end__([<p>__end__</p>]):::last
 	Bear_Researcher -.-> Bull_Researcher;
 	Bear_Researcher -.-> Research_Manager;
 	Bull_Researcher -.-> Bear_Researcher;
 	Bull_Researcher -.-> Research_Manager;
-	Fundamentals_deep_research_Analyst --> Bull_Researcher;
-	Macro_deep_research_Analyst --> Bull_Researcher;
+	Fundamentals_deep_research_Analyst --> Sync_Node;
+	Macro_deep_research_Analyst --> Sync_Node;
 	Market_Analyst -.-> Msg_Clear_Market;
 	Market_Analyst -.-> tools_market;
 	Msg_Clear_Market --> Bull_Researcher;
 	Neutral_Analyst -.-> Risk_Judge;
 	Neutral_Analyst -.-> Risky_Analyst;
-	News_deep_research_Analyst --> Bull_Researcher;
+	News_deep_research_Analyst --> Sync_Node;
 	Research_Manager --> Trader;
 	Risk_Judge --> Report_Writer;
 	Risky_Analyst -.-> Risk_Judge;
 	Risky_Analyst -.-> Safe_Analyst;
 	Safe_Analyst -.-> Neutral_Analyst;
 	Safe_Analyst -.-> Risk_Judge;
-	Social_media_deep_research_Analyst --> Bull_Researcher;
+	Social_media_deep_research_Analyst --> Sync_Node;
+	Sync_Node -. &nbsp;continue&nbsp; .-> Market_Analyst;
 	Trader --> Risky_Analyst;
 	__start__ --> Fundamentals_deep_research_Analyst;
 	__start__ --> Macro_deep_research_Analyst;
-	__start__ --> Market_Analyst;
 	__start__ --> News_deep_research_Analyst;
 	__start__ --> Social_media_deep_research_Analyst;
 	tools_market --> Market_Analyst;
 	Report_Writer --> __end__;
+	Sync_Node -. &nbsp;wait&nbsp; .-> Sync_Node;
 	classDef default fill:#f2f0ff,line-height:1.2
 	classDef first fill-opacity:0
 	classDef last fill:#bfb6fc
