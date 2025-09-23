@@ -10,22 +10,38 @@
 
 ## 快速开始
 
-### 运行入口
+### 环境配置
 
-在运行项目之前，需要先配置环境变量：
+在运行项目之前，需要先配置环境变量。创建 `.env` 文件并添加必要的API密钥：
 
 ```bash
-# 复制环境变量模板文件
-cp .env.example .env
+# 创建环境变量文件
+touch .env
 
-# 编辑 .env 文件，添加必要的API密钥
-# 例如：OPENAI_API_KEY、FINNHUB_API_KEY等
+# 编辑 .env 文件，添加以下API密钥：
+OPENAI_API_KEY=your_openai_api_key_here
+TAVILY_API_KEY=your_tavily_api_key_here        # 用于深度研究搜索
+BASE_URL=https://api.openai.com/v1             # API基础URL，可自定义
 ```
+
+### 安装依赖
+
+使用 `uv` 包管理器安装项目依赖：
+
+```bash
+# 安装 uv（如果尚未安装）
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# 安装项目依赖
+uv sync
+```
+
+### 运行项目
 
 项目的主要运行入口是 `main.py`：
 
-```python
-# 使用 uv 运行
+```bash
+# 使用 uv 运行主程序
 uv run main.py
 ```
 
@@ -34,11 +50,16 @@ uv run main.py
 当前版本的 `selected_analysts` 仅支持 **market analyst**，这是为了专注于技术分析能力的优化。未来版本将逐步支持更多分析师类型。
 
 ```python
-# main.py 中的配置
+# main.py 中的配置示例
 ta = TradingAgentsGraph(
     selected_analysts=["market"],  # 当前仅支持市场分析师
-    selected_deep_researcher=["social_media_deep_research", "news_deep_research", "fundamentals_deep_research"],
-    debug=config["debug"],
+    selected_deep_researcher=[
+        "social_media_deep_research", 
+        "news_deep_research", 
+        "fundamentals_deep_research", 
+        "macro_deep_research"
+    ],
+    debug=False,
     config=config
 )
 ```
@@ -56,23 +77,23 @@ ta = TradingAgentsGraph(
 #### 常规分析师 (Regular Analysts)
 这些分析师负责基础的市场数据收集和初步分析：
 
-- **Market Analyst (市场分析师)**
+- **Market Analyst (市场分析师)** [当前支持]
   - **功能**: 技术指标分析和市场趋势研究
   - **工具**: 移动平均线(SMA/EMA)、MACD、RSI、布林带、ATR、成交量加权移动平均(VWMA)等
   - **输出**: 详细的技术分析报告，包含趋势判断和关键指标分析
   - **特点**: 选择最相关的8个指标进行互补性分析，避免冗余
 
-- **Social Media Analyst (社交媒体分析师)**
+- **Social Media Analyst (社交媒体分析师)** [待支持]
   - **功能**: 社交媒体情绪分析和公司特定新闻研究
   - **数据源**: Reddit、Twitter等社交平台的股票讨论
   - **输出**: 公众情绪报告和社交媒体趋势分析
 
-- **News Analyst (新闻分析师)**
+- **News Analyst (新闻分析师)** [待支持]
   - **功能**: 全球新闻和宏观经济指标分析
   - **数据源**: 主流财经媒体、政策发布、行业新闻
   - **输出**: 新闻事件对市场影响的综合分析报告
 
-- **Fundamentals Analyst (基本面分析师)**
+- **Fundamentals Analyst (基本面分析师)** [待支持]
   - **功能**: 公司财务数据和基本面信息分析
   - **数据源**: 财务报表、内部人士交易、公司公告
   - **输出**: 公司基本面健康度和价值评估报告
@@ -109,6 +130,16 @@ ta = TradingAgentsGraph(
     - 成长性驱动因素识别
     - 估值合理性多维度对比
   - **输出**: 基本面评级、财务健康度分析、同业对比、投资价值评估
+
+- **Macro Deep Research Analyst (宏观深度研究分析师)**
+  - **功能**: 宏观经济环境与政策影响的深度分析
+  - **数据源**: 央行政策、经济数据、国际市场动态
+  - **分析维度**:
+    - 货币政策影响评估
+    - 经济周期位置判断
+    - 国际市场联动性分析
+    - 行业政策影响评估
+  - **输出**: 宏观环境报告、政策影响评估、市场风险预警
 
 ### 2. 研究辩论层 (Research Team)
 
@@ -159,34 +190,180 @@ ta = TradingAgentsGraph(
 
 ## 工作流程
 
-1. **并行分析阶段**: 所有分析师(包括深度研究分析师)同时开始工作
-   - 常规分析师进行基础数据收集和分析
-   - 深度研究分析师进行专题深度调研
+系统的工作流程经过精心设计，确保高效协作和全面分析：
 
-2. **研究辩论阶段**: Bull和Bear研究员基于所有分析师的报告进行辩论
+1. **并行分析阶段**: 
+   - 深度研究分析师并行启动，进行专题深度调研
+   - 常规分析师等待深度研究完成后开始工作
+   - 同步节点协调不同阶段的衔接
+
+2. **常规分析阶段**: 
+   - 常规分析师串行执行，确保数据一致性
+   - 每个分析师可调用工具进行数据收集和分析
+   - 生成专业分析报告
+
+3. **研究辩论阶段**: 
+   - Bull和Bear研究员基于所有分析师的报告进行辩论
    - 多轮动态辩论，直到达到设定轮数或Research Manager介入
    - Research Manager综合评估并形成投资建议
 
-3. **交易决策阶段**: Trader基于投资建议制定交易方案
+4. **交易决策阶段**: 
+   - Trader基于投资建议制定交易方案
 
-4. **风险评估阶段**: 三类风险分析师对交易方案进行多角度评估
+5. **风险评估阶段**: 
+   - 三类风险分析师对交易方案进行多角度评估
    - 多轮风险辩论，全面评估潜在风险
    - Risk Judge做出最终批准或拒绝决定
 
+6. **报告生成阶段**:
+   - Report Writer整合所有分析结果
+   - 生成最终的综合研究报告
+
 ## 技术特性
 
+### 核心架构
 - **LangGraph架构**: 基于LangGraph构建的模块化智能体系统
-- **并行处理**: 多个分析师可以并行工作，提高效率
+- **模块化设计**: 重构后的图设置系统，功能清晰分离
+- **并行处理**: 深度研究分析师并行工作，提高效率
+- **同步机制**: 智能同步节点确保工作流程的协调
+
+### 智能体能力
 - **记忆机制**: 各个智能体具备学习和记忆能力，能够从历史决策中改进
 - **深度研究集成**: 结合open_deep_research的深度调研能力
 - **动态辩论**: 支持多轮动态辩论机制
+- **工具调用**: 支持丰富的数据获取和分析工具
+
+### 配置灵活性
 - **可配置性**: 支持灵活的分析师组合和参数配置
+- **多LLM支持**: 支持OpenAI、Anthropic、Google等多种LLM提供商
+- **在线/离线模式**: 支持在线工具和离线缓存数据两种模式
 
 ## 配置说明
 
+### 系统配置
+
 系统通过 `DEFAULT_CONFIG` 进行配置，主要参数包括：
 
-- **LLM设置**: 支持OpenAI、Anthropic、Google等多种LLM提供商
-- **辩论轮数**: 可配置投资辩论和风险辩论的最大轮数
-- **工具选择**: 支持在线工具和离线缓存数据两种模式
-- **调试模式**: 支持详细的执行过程追踪
+```python
+DEFAULT_CONFIG = {
+    # 路径配置
+    "project_dir": PROJECT_ROOT,
+    "results_dir": PROJECT_ROOT / "results",
+    "data_dir": PROJECT_ROOT / "tradingagents" / "datainterface" / "data",
+    "data_cache_dir": PROJECT_ROOT / "tradingagents" / "datainterface" / "data_cache",
+    
+    # LLM设置
+    "llm_provider": "openai",
+    "deep_think_llm": "gpt-5-mini",      # 深度思考模型
+    "quick_think_llm": "gpt-5-nano",     # 快速思考模型
+    "backend_url": "https://api.openai.com/v1",
+    
+    # 辩论设置
+    "max_debate_rounds": 1,              # 投资辩论最大轮数
+    "max_risk_discuss_rounds": 1,        # 风险辩论最大轮数
+    "max_recur_limit": 100,              # 递归限制
+    
+    # 工具设置
+    "online_tools": True,                # 是否使用在线工具
+    
+    # 调试设置
+    "debug": True,                       # 是否输出调试信息
+}
+```
+
+### 自定义配置
+
+在 `main.py` 中可以自定义配置：
+
+```python
+# 创建自定义配置
+config = DEFAULT_CONFIG.copy()
+config["llm_provider"] = "openai"
+config["deep_think_llm"] = "gpt-5-mini"
+config["quick_think_llm"] = "gpt-5-nano"
+config["backend_url"] = os.environ.get("BASE_URL")
+config["max_debate_rounds"] = 1
+config["max_risk_discuss_rounds"] = 1
+config["online_tools"] = True
+config["debug"] = False
+
+# 目标股票和日期
+ticker = "000300.SH"  # 沪深300指数
+current_date = "2025-09-23"
+```
+
+## 输出结果
+
+系统运行后会在 `results/{ticker}/{date}/` 目录下生成以下文件：
+
+- `trading_graph.mmd`: Mermaid格式的工作流图
+- `market_report.md`: 市场分析报告
+- `research_report.md`: 综合研究报告
+- `final_trade_decision.md`: 最终交易决策
+- `final_state.json`: 完整的系统状态数据
+- `*_deep_research_report.md`: 各类深度研究报告
+
+## CLI工具
+
+项目还提供了命令行交互工具：
+
+```bash
+# 运行CLI工具
+uv run python -m cli.main
+```
+
+CLI工具提供了交互式的分析师选择和配置界面，方便用户快速设置和运行分析。
+
+## 开发指南
+
+### 项目结构
+
+```
+TradingAgents/
+├── main.py                    # 主运行入口
+├── cli/                       # CLI工具
+├── tradingagents/            # 核心代码
+│   ├── agents/               # 智能体定义
+│   ├── graph/                # 图结构和工作流
+│   ├── dataflows/            # 数据流处理
+│   ├── datainterface/        # 数据接口
+│   └── utils/                # 工具函数
+├── open_deep_research/       # 深度研究模块
+├── results/                  # 输出结果
+└── assets/                   # 资源文件
+```
+
+### 扩展开发
+
+1. **添加新分析师**: 在 `tradingagents/agents/analysts/` 目录下创建新的分析师类
+2. **修改工作流**: 在 `tradingagents/graph/setup.py` 中调整图结构
+3. **添加数据源**: 在 `tradingagents/dataflows/` 中添加新的数据接口
+4. **自定义工具**: 在 `tradingagents/agents/utils/` 中添加新的工具函数
+
+## 注意事项
+
+1. **API配额**: 深度研究功能会消耗大量API调用，请注意配额限制
+2. **数据缓存**: 系统支持数据缓存，可以减少重复的API调用
+3. **调试模式**: 开启调试模式可以查看详细的执行过程，但会增加输出量
+4. **网络要求**: 在线工具模式需要稳定的网络连接
+
+## 许可证
+
+本项目基于原开源项目的许可证进行开发和分发。
+
+## 贡献
+
+欢迎提交Issue和Pull Request来改进项目。在贡献代码前，请确保：
+
+1. 代码符合项目的编码规范
+2. 添加必要的测试和文档
+3. 确保所有测试通过
+
+## 支持
+
+如果在使用过程中遇到问题，请：
+
+1. 检查环境变量配置是否正确
+2. 确认API密钥是否有效
+3. 查看调试输出信息
+4. 提交Issue描述具体问题
